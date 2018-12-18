@@ -22,17 +22,16 @@ package com.thinkbiganalytics.metadata.modeshape.project;
 
 import com.thinkbiganalytics.metadata.api.MetadataAccess;
 import com.thinkbiganalytics.metadata.api.project.Project;
+import com.thinkbiganalytics.metadata.api.project.ProjectProvider;
 import com.thinkbiganalytics.metadata.api.project.security.ProjectAccessControl;
 import com.thinkbiganalytics.metadata.modeshape.JcrMetadataAccess;
 import com.thinkbiganalytics.metadata.modeshape.JcrTestConfig;
 import com.thinkbiganalytics.metadata.modeshape.ModeShapeEngineConfig;
-import com.thinkbiganalytics.metadata.modeshape.project.providers.ProjectProvider;
 import com.thinkbiganalytics.security.UsernamePrincipal;
 import com.thinkbiganalytics.security.action.AllowedActions;
 import com.thinkbiganalytics.security.action.AllowedEntityActionsProvider;
 import com.thinkbiganalytics.security.action.config.ActionsModuleBuilder;
 import com.thinkbiganalytics.security.role.SecurityRoleProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -45,14 +44,13 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import javax.annotation.Resource;
+import javax.inject.Inject;
 import java.security.AccessControlException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
-
-import javax.annotation.Resource;
-import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,8 +108,7 @@ public class JcrProjectProviderAccessControlTest extends AbstractTestNGSpringCon
                 */
 
             Project p3 = projProvider.ensureProject("Project3");
-            p3.setProjectName("ProjectName3");
-            p3.setContainerImage("kylo/nonExisentImage");
+            p3.setName("ProjectName3");
 
             // sets Access Control for user.
             //p3.getAllowedActions().enableAll(TEST_USER1);
@@ -121,7 +118,7 @@ public class JcrProjectProviderAccessControlTest extends AbstractTestNGSpringCon
             p3.getRoleMembership(ProjectAccessControl.ROLE_EDITOR).ifPresent(role -> role.addMember(TEST_USER1));
             p3.getRoleMembership(ProjectAccessControl.ROLE_READER).ifPresent(role -> role.addMember(TEST_USER2));
 
-            return p3.getProjectName();
+            return p3.getName();
         }, JcrMetadataAccess.SERVICE);
 
     }

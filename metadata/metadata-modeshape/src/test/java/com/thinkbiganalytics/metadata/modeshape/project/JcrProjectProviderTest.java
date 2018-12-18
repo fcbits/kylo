@@ -25,11 +25,10 @@ package com.thinkbiganalytics.metadata.modeshape.project;
 
 import com.thinkbiganalytics.metadata.api.MetadataAccess;
 import com.thinkbiganalytics.metadata.api.project.Project;
+import com.thinkbiganalytics.metadata.api.project.ProjectProvider;
 import com.thinkbiganalytics.metadata.modeshape.JcrMetadataAccess;
 import com.thinkbiganalytics.metadata.modeshape.JcrTestConfig;
 import com.thinkbiganalytics.metadata.modeshape.ModeShapeEngineConfig;
-import com.thinkbiganalytics.metadata.modeshape.project.providers.ProjectProvider;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,11 +36,10 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
-import java.util.Optional;
-
 import javax.annotation.Resource;
 import javax.inject.Inject;
+import java.util.Collection;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,7 +48,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @SpringBootTest(classes = {ModeShapeEngineConfig.class, JcrTestConfig.class})
 public class JcrProjectProviderTest extends AbstractTestNGSpringContextTests {
-    private static final Logger logger = LoggerFactory.getLogger(JcrProjectProviderAccessControlTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(JcrProjectProviderTest.class);
 
     @Inject
     private JcrMetadataAccess metadata;
@@ -82,9 +80,8 @@ public class JcrProjectProviderTest extends AbstractTestNGSpringContextTests {
             assertThat(pj1).isNotNull();
 
             pj1.setSystemName("ProjectName2");
-            pj1.setProjectName("Project Name 2");
+            pj1.setName("Project Name 2");
             pj1.setDescription("This is a fully defined project");
-            pj1.setContainerImage("kylo/nonExistentContainer");
         }, MetadataAccess.SERVICE);
     }
 
@@ -97,9 +94,9 @@ public class JcrProjectProviderTest extends AbstractTestNGSpringContextTests {
 
             Project project = optional.get();
 
-            assertThat(project).extracting(Project::getSystemName, Project::getProjectName,
-                                           Project::getDescription, Project::getContainerImage)
-                .containsExactly("ProjectName2", "Project Name 2", "This is a fully defined project", "kylo/nonExistentContainer");
+            assertThat(project).extracting(Project::getSystemName, Project::getName,
+                                           Project::getDescription)
+                .containsExactly("ProjectName2", "Project Name 2", "This is a fully defined project");
         }, MetadataAccess.SERVICE);
     }
 
