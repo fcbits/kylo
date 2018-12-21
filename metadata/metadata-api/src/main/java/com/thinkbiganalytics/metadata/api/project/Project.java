@@ -44,6 +44,10 @@ public interface Project extends AccessControlled, Auditable, Iconable, SystemEn
 
     boolean removeFeed(Feed feed);
 
+    String getDescription();
+
+    void setDescription(String description);
+
     interface ID extends Serializable {
 
     }

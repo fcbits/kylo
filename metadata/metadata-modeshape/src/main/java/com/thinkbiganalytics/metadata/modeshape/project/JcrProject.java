@@ -57,6 +57,11 @@ public class JcrProject extends JcrEntity<Project.ID> implements Project, Audita
     private static final String FEEDS = "tba:feeds";
 
     /**
+     * Name of the {@code description} property
+     */
+    private static final String DESCRIPTION = "tba:description";
+
+    /**
      * Constructs a {@code Project} using the specified node.
      *
      * @param node the JCR node for the user
@@ -114,6 +119,16 @@ public class JcrProject extends JcrEntity<Project.ID> implements Project, Audita
         Node feedNode = jcrFeed.getNode();
 
         return JcrPropertyUtil.removeFromSetProperty(getNode(), FEEDS, feedNode);
+    }
+
+    @Override
+    public String getDescription() {
+        return getProperty(DESCRIPTION);
+    }
+
+    @Override
+    public void setDescription(String description) {
+        setProperty(DESCRIPTION, description);
     }
 
     @Override
